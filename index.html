@@ -42,17 +42,18 @@
   </fieldset>
 
   <section id="error-btns">
-    <button>Console Log Demo</button>
-    <button>Console Error Demo</button>
-    <button>Console Dir</button>
-    <button>Console dirxml</button>
-    <button>Console Group Start</button>
-    <button>Console Group End</button>
-    <button>Console Table</button>
-    <button>Start Timer</button>
-    <button>End Timer</button>
-    <button>Console Trace</button>
-    <button>Trigger a Global Error</button>
+    <button id="btn0">Console Log Demo</button>
+    <button id="btn1">Console Error Demo</button>
+    <button id="btn2">Console Dir</button>
+    <button id="btn3">Console dirxml</button>
+    <button id="btn11">Console error</button>
+    <button id="btn4">Console Group Start</button>
+    <button id="btn5">Console Group End</button>
+    <button id="btn6">Console Table</button>
+    <button id="btn7">Start Timer</button>
+    <button id="btn8">End Timer</button>
+    <button id="btn9">Console Trace</button>
+    <button id="btn10">Trigger a Global Error</button>
   </section>
 
   <script>
@@ -67,6 +68,77 @@
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
     // TODO - Make buttons functional
+    const tracTest = () => { deep(); };
+    const deep = () => { deeper(); };
+    const deeper = () => { deepest(); };
+    const deepest = () => { console.trace(); };
+    tracTest();
+
+
+    let btnsLeng = errorBtns.length;
+    function errorBtnsFuncts(MouseEvent){
+      // console.log(MouseEvent.target);
+      switch(MouseEvent.target.id) {
+      case "btn0":
+        console.log("Console Log Demo");
+        break;
+      case "btn1":
+        console.error("Console Error Demo");
+        break;
+      case "btn2":
+        console.dir(MouseEvent.target);
+        break;
+      case "btn3":
+        console.dirxml(document.body);
+        break;
+      case "btn11":
+        console.error("{'msg':'Ooh!'}");
+        break;
+      case "btn4":
+        console.group("Log Group");
+        break;
+      case "btn5":
+        console.groupEnd("Log Group");
+        break;
+      case "btn6":
+        console.table([{
+          name: "Software Engineering",
+          num: "110"
+        },{
+          name: "Programming Languages",
+          num: "130"
+        },{
+          name: "Advanced Software Engineering",
+          num: "112"
+        },{
+          name: "Design and Analysis of Algorithm",
+          num: "101"
+        }]);
+        break;
+      case "btn7":
+        console.time("Run Time");
+        console.log("Timer started!");
+        break;
+      case "btn8":
+        console.log("Timer ended!");
+        console.timeEnd("Run Time");
+        break;
+      case "btn9":
+        tracTest();
+        break;
+      case "btn10":
+        
+        break;
+      // default:
+       
+    }
+    }
+    for (let i = 0; i < btnsLeng; i++){
+      errorBtns[i].addEventListener('click', MouseEvent => errorBtnsFuncts(MouseEvent));
+    }
+    
+    
+
   </script>
 </body>
 </html>
