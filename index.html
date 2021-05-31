@@ -28,14 +28,16 @@
 <body>
   <fieldset>
     <legend>Error Calculator</legend>
-    <input type="number" name="first-num" id="first-num" />
+    <!-- <input type="number" name="first-num" id="first-num" /> -->
+    <input type="text" name="first-num" id="first-num" />
     <select name="operator" id="operator">
       <option>+</option>
       <option>-</option>
       <option>*</option>
       <option>/</option>
     </select>
-    <input type="number" name="second-num" id="second-num" />
+    <!-- <input type="number" name="second-num" id="second-num" /> -->
+    <input type="text" name="second-num" id="second-num" />
     <button id="calculate">Calculate</button>
     <br />
     <output></output>
@@ -56,14 +58,51 @@
     <button id="btn10">Trigger a Global Error</button>
   </section>
 
+
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
   <script>
+    window.TrackJS && TrackJS.install({ 
+      token: "1384e4c22aff4c1fa05e25c2fcec1303"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+  </script>
+  <script>
+
+
+                        
+
+
+    //added custom error
+    class Convert2NumberError extends Error {
+      constructor(message) {
+        super(message); 
+        this.name = "Convert2NumberError";
+      }
+    }
+
+
     let calculateBtn = document.querySelector('#calculate');
     calculateBtn.addEventListener('click', () => {
       let output = document.querySelector('output');
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      // for 'calculate' button
+      let firstNumConverted2Number;
+      let secondNumConverted2Number;
+      try{
+        if (isNaN(Number(firstNum))){
+          throw new Convert2NumberError("Convert2NumberError, cannot convert first input to number");
+        }
+        if (isNaN(Number(secondNum))){
+          throw new Convert2NumberError("Convert2NumberError, cannot convert second input to number");
+        }
+      }catch(error){
+        console.log("Sadly an error happened friend:");
+        console.error(error);
+      }
+
+      output.innerHTML = eval(`${Number(firstNum)} ${operator} ${Number(secondNum)}`);
     });
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
@@ -75,9 +114,16 @@
     tracTest();
 
 
+    window.onerror = function(message, url, line, col, error) {
+      console.log("Sadly an error happened friend:");
+    };
+    function triggerAGlobalErr(){
+      let noExistVariable = noExistFunction();// this will go wrong
+    }
+
+
     let btnsLeng = errorBtns.length;
     function errorBtnsFuncts(MouseEvent){
-      // console.log(MouseEvent.target);
       switch(MouseEvent.target.id) {
       case "btn0":
         console.log("Console Log Demo");
@@ -92,7 +138,7 @@
         console.dirxml(document.body);
         break;
       case "btn11":
-        console.error("{'msg':'Ooh!'}");
+        console.error("{msg:'Ooh!'}");
         break;
       case "btn4":
         console.group("Log Group");
@@ -127,7 +173,7 @@
         tracTest();
         break;
       case "btn10":
-        
+        triggerAGlobalErr();
         break;
       // default:
        
@@ -137,6 +183,8 @@
       errorBtns[i].addEventListener('click', MouseEvent => errorBtnsFuncts(MouseEvent));
     }
     
+    
+   
     
 
   </script>
